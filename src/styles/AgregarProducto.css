@@ -1,0 +1,305 @@
+/* Contenedor de las cards en fila horizontal */
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Ajuste de las cards */
+.card {
+  flex: 1 1 280px;
+  max-width: 350px;
+  min-width: 220px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+  font-size: 50px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #007bff;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: #333;
+}
+/* Contenedor de la tabla para scroll horizontal */
+.tabla-contenedor {
+  width: 100%;
+  overflow-x: auto; /* Scroll horizontal si es necesario */
+  margin-bottom: 15px;
+}
+
+/* Ajustes de tabla para que sea responsiva */
+.tabla-inventario {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Ajusta columnas al contenido */
+  word-wrap: break-word; /* Rompe palabras largas */
+  min-width: 600px; /* Ancho mínimo para tablas grandes */
+}
+
+/* Celdas */
+.tabla-inventario th,
+.tabla-inventario td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Encabezados */
+.tabla-inventario th {
+  background-color: #0056a6;
+  color: #fff;
+}
+
+/* Filas alternas */
+.tabla-inventario tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Centrar botones de acciones */
+.tabla-inventario td:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 5px;
+  white-space: nowrap;
+}
+
+/* Texto largo dentro de celdas */
+.tabla-inventario td {
+  word-break: break-word; /* Rompe palabras largas */
+  max-width: 200px; /* Ajusta según necesites */
+}
+
+/* Ajustar modal si tabla es muy ancha */
+.modal {
+  max-width: 90%; /* Aumenta ancho del modal en pantallas grandes */
+  overflow-x: hidden; /* Evita scroll extra */
+}
+
+/* Contenedor scroll para la tabla en el modal */
+.modal .tabla-contenedor {
+  max-height: 400px; /* Altura máxima */
+  overflow-y: auto; /* Scroll vertical si hay muchas filas */
+}
+
+/* Botones de acciones */
+.btn-edit, .btn-delete {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.btn-edit {
+  background-color: #28a745;
+}
+.btn-edit:hover {
+  background-color: #218838;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+}
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal principal */
+.modal {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 16px;
+  max-width: 650px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: modalFade 0.3s ease-in-out;
+}
+
+@keyframes modalFade {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* Título del modal */
+.modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+/* Inputs, textarea y select */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 12px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+/* Botones modal */
+.btn-cancel {
+  background: #e0e0e0;
+  color: #333;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-cancel:hover {
+  background: #d4d4d4;
+}
+
+.btn-submit {
+  background: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-submit:hover {
+  background: #0056b3;
+}
+
+/* Input de búsqueda */
+.modal input[type="text"] {
+  margin-bottom: 15px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.pagination .page-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pagination .page-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.pagination .page-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cards-grid { gap: 15px; padding: 15px; }
+  .card { flex: 1 1 45%; max-width: 300px; }
+  .modal { width: 95%; padding: 20px; }
+  .tabla-inventario { font-size: 14px; }
+}
+
+@media (max-width: 480px) {
+  .cards-grid { flex-direction: column; gap: 10px; padding: 10px; }
+  .card { flex: 1 1 100%; max-width: 100%; }
+  .modal { width: 95%; padding: 15px; }
+  .tabla-inventario th, .tabla-inventario td { font-size: 12px; padding: 8px; }
+}
+/* Contenedor del input con icono */
+
+.input-icon {
+  position: relative;
+  width: 100%;
+}
+
+.icon-input {
+  position: absolute;
+  left: 10px;
+  top: 50%;              /* coloca el icono a la mitad del contenedor */
+  transform: translateY(-50%);  /* ajusta su centro */
+  font-size: 18px;        /* ajusta el tamaño del icono si es necesario */
+  color: #555;
+  pointer-events: none;   /* permite escribir sin problemas */
+}
+
+.input-icon input[type="text"] {
+  padding-left: 35px;     /* deja espacio para el icono */
+  height: 35px;           /* ajusta altura del input si quieres más grande */
+  width: 100%;
+  box-sizing: border-box;
+}
+.input-icon input::placeholder {
+  color: #aaa;
+}
+
+.input-icon input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+}
+.input-icon input:focus + .icon-input,
+.input-icon:focus-within .icon-input {
+  color: #0056b3;
+}

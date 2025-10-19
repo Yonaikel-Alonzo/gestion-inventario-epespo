@@ -1,0 +1,45 @@
+.dashboard-container {
+  display: flex;
+}
+.main-content {
+  margin-left: 250px;
+  width: 100%;
+  transition: margin-left 0.3s;
+  background-color: #F2F2F2; /* fondo gris claro */
+  min-height: 100vh;
+}
+.sidebar.closed ~ .main-content {
+  margin-left: 70px;
+}
+.content {
+  padding: 20px;
+  color: #003366; /* texto azul oscuro */
+}
+.content {
+  padding: 20px;
+  color: #003366;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra horizontalmente */
+  justify-content: center; /* centra verticalmente */
+  min-height: calc(100vh - 60px); /* altura total menos navbar */
+  text-align: center;
+}
+
+.image-container {
+  margin-top: 30px;
+}
+
+.dashboard-logo {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 15px; /* opcional, bordes redondeados */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* sombra profesional */
+  transition: transform 0.3s;
+}
+
+.dashboard-logo:hover {
+  transform: scale(1.05); /* efecto hover */
+}
+
