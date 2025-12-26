@@ -26,10 +26,11 @@ const RestablecerContrasena = () => {
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
-  if (!correoUrl) {
-    navigate("/recuperar-contrasena", { replace: true });
-  }
-}, [correoUrl, navigate]);
+    if (!correoUrl) {
+      navigate("/recuperar-contrasena", { replace: true });
+    }
+  }, [correoUrl, navigate]);
+
   useEffect(() => {
     if (sentUrl === "1") setCooldown(60);
   }, [sentUrl]);
@@ -54,10 +55,12 @@ const RestablecerContrasena = () => {
     else if (!/^\d{6}$/.test(codigo)) e.codigo = "Debe tener 6 dígitos";
 
     if (!contrasena) e.contrasena = "La contraseña es obligatoria";
-    else if (contrasena.length < 6) e.contrasena = "Mínimo 6 caracteres";
+    else if (contrasena.length < 8) e.contrasena = "Mínimo 8 caracteres";
 
-    if (!contrasena_confirmation) e.contrasena_confirmation = "Confirma la contraseña";
-    else if (contrasena_confirmation !== contrasena) e.contrasena_confirmation = "No coincide";
+    if (!contrasena_confirmation)
+      e.contrasena_confirmation = "Confirma la contraseña";
+    else if (contrasena_confirmation !== contrasena)
+      e.contrasena_confirmation = "No coincide";
 
     return e;
   };
@@ -80,8 +83,17 @@ const RestablecerContrasena = () => {
       toast.success("Código reenviado. Revisa tu correo.");
       setCooldown(60);
     } catch (error) {
-      if (error.request) toast.error("No hay conexión con el servidor");
-      else toast.error(error.response?.data?.message || "Error al reenviar código");
+      if (error.response) {
+        const msg =
+          error.response.data?.message ||
+          error.response.data?.errors?.correo?.[0] ||
+          "Error al reenviar código";
+        toast.error(msg);
+      } else if (error.request) {
+        toast.error("No hay conexión con el servidor");
+      } else {
+        toast.error("Error inesperado");
+      }
     } finally {
       setResendLoading(false);
     }
@@ -103,7 +115,7 @@ const RestablecerContrasena = () => {
     try {
       await axiosClient.post("/reset-password", {
         correo,
-        codigo,
+        code: codigo, // ✅ importante: el backend espera "code"
         contrasena,
         contrasena_confirmation,
       });
@@ -111,9 +123,19 @@ const RestablecerContrasena = () => {
       toast.success("Contraseña actualizada correctamente");
       setTimeout(() => navigate("/login"), 1400);
     } catch (error) {
-      console.log("RESET ERROR:", error.response?.data);
-      const msg = error.response?.data?.message;
-      toast.error(msg || "Error al restablecer contraseña");
+      if (error.response) {
+        const msg =
+          error.response.data?.message ||
+          error.response.data?.errors?.correo?.[0] ||
+          error.response.data?.errors?.code?.[0] ||
+          error.response.data?.errors?.contrasena?.[0] ||
+          "Error al restablecer contraseña";
+        toast.error(msg);
+      } else if (error.request) {
+        toast.error("No hay conexión con el servidor");
+      } else {
+        toast.error("Error inesperado");
+      }
     } finally {
       setLoading(false);
     }
@@ -129,7 +151,11 @@ const RestablecerContrasena = () => {
 
           <div className="input-group-login">
             <label htmlFor="correo">Correo</label>
-            <div className={`input-icon-login ${errores.correo ? "input-error" : ""}`}>
+            <div
+              className={`input-icon-login ${
+                errores.correo ? "input-error" : ""
+              }`}
+            >
               <FaUser className={`icon ${correo ? "active" : ""}`} />
               <input
                 id="correo"
@@ -140,12 +166,18 @@ const RestablecerContrasena = () => {
                 placeholder="Ingresa tu correo"
               />
             </div>
-            {errores.correo && <span className="mensaje-error">{errores.correo}</span>}
+            {errores.correo && (
+              <span className="mensaje-error">{errores.correo}</span>
+            )}
           </div>
 
           <div className="input-group-login">
             <label htmlFor="codigo">Código</label>
-            <div className={`input-icon-login ${errores.codigo ? "input-error" : ""}`}>
+            <div
+              className={`input-icon-login ${
+                errores.codigo ? "input-error" : ""
+              }`}
+            >
               <FaLock className={`icon ${codigo ? "active" : ""}`} />
               <input
                 id="codigo"
@@ -155,15 +187,21 @@ const RestablecerContrasena = () => {
                 value={codigo}
                 disabled={loading}
                 onChange={(e) => setCodigo(e.target.value.replace(/\D/g, ""))}
-                placeholder="Ingresa el codigo"
+                placeholder="Ingresa el código"
               />
             </div>
-            {errores.codigo && <span className="mensaje-error">{errores.codigo}</span>}
+            {errores.codigo && (
+              <span className="mensaje-error">{errores.codigo}</span>
+            )}
           </div>
 
           <div className="input-group-login">
             <label htmlFor="contrasena">Nueva Contraseña</label>
-            <div className={`input-icon-login ${errores.contrasena ? "input-error" : ""}`}>
+            <div
+              className={`input-icon-login ${
+                errores.contrasena ? "input-error" : ""
+              }`}
+            >
               <FaLock className={`icon ${contrasena ? "active" : ""}`} />
               <input
                 id="contrasena"
@@ -180,13 +218,21 @@ const RestablecerContrasena = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            {errores.contrasena && <span className="mensaje-error">{errores.contrasena}</span>}
+            {errores.contrasena && (
+              <span className="mensaje-error">{errores.contrasena}</span>
+            )}
           </div>
 
           <div className="input-group-login">
             <label htmlFor="contrasena_confirmation">Confirmar Contraseña</label>
-            <div className={`input-icon-login ${errores.contrasena_confirmation ? "input-error" : ""}`}>
-              <FaLock className={`icon ${contrasena_confirmation ? "active" : ""}`} />
+            <div
+              className={`input-icon-login ${
+                errores.contrasena_confirmation ? "input-error" : ""
+              }`}
+            >
+              <FaLock
+                className={`icon ${contrasena_confirmation ? "active" : ""}`}
+              />
               <input
                 id="contrasena_confirmation"
                 type={showPassword ? "text" : "password"}
@@ -197,7 +243,9 @@ const RestablecerContrasena = () => {
               />
             </div>
             {errores.contrasena_confirmation && (
-              <span className="mensaje-error">{errores.contrasena_confirmation}</span>
+              <span className="mensaje-error">
+                {errores.contrasena_confirmation}
+              </span>
             )}
           </div>
 
@@ -235,3 +283,4 @@ const RestablecerContrasena = () => {
 };
 
 export default RestablecerContrasena;
+
