@@ -36,16 +36,25 @@ const RecuperarContrasena = () => {
       await axiosClient.post("/forgot-password", { correo });
 
       toast.success("Te enviamos un código. Revisa tu correo.");
-   
-      setTimeout(() => {
-      setTimeout(() => {
-  navigate(`/restablecer-contrasena?correo=${encodeURIComponent(correo)}&sent=1`);
-}, 900);
 
+      setTimeout(() => {
+        navigate(
+          `/restablecer-contrasena?correo=${encodeURIComponent(correo)}&sent=1`
+        );
       }, 900);
     } catch (error) {
-      if (error.request) toast.error("No hay conexión con el servidor");
-      else toast.error(error.response?.data?.message || "Error al enviar solicitud");
+      // ✅ Primero response (422/404/500)
+      if (error.response) {
+        const msg =
+          error.response.data?.message ||
+          error.response.data?.errors?.correo?.[0] ||
+          "Error al enviar solicitud";
+        toast.error(msg);
+      } else if (error.request) {
+        toast.error("No hay conexión con el servidor");
+      } else {
+        toast.error("Error inesperado");
+      }
     } finally {
       setLoading(false);
     }
@@ -59,7 +68,11 @@ const RecuperarContrasena = () => {
 
           <div className="input-group-login">
             <label htmlFor="correo">Correo</label>
-            <div className={`input-icon-login ${errores.correo ? "input-error" : ""}`}>
+            <div
+              className={`input-icon-login ${
+                errores.correo ? "input-error" : ""
+              }`}
+            >
               <FaUser className={`icon ${correo ? "active" : ""}`} />
               <input
                 id="correo"
@@ -70,22 +83,33 @@ const RecuperarContrasena = () => {
                 placeholder="Ingresa tu correo"
               />
             </div>
-            {errores.correo && <span className="mensaje-error">{errores.correo}</span>}
+            {errores.correo && (
+              <span className="mensaje-error">{errores.correo}</span>
+            )}
           </div>
 
           <button type="submit" disabled={loading}>
             {loading ? <span className="button-loader" /> : "Enviar código"}
           </button>
 
-          <div className="forgot-password" onClick={() => !loading && navigate("/login")}>
+          <div
+            className="forgot-password"
+            onClick={() => !loading && navigate("/login")}
+          >
             Volver a iniciar sesión
           </div>
         </form>
       </div>
 
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar closeButton={false} />
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar
+        closeButton={false}
+      />
     </div>
   );
 };
 
 export default RecuperarContrasena;
+
