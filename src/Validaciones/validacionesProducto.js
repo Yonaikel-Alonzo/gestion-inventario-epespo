@@ -24,7 +24,8 @@ export const validarNumeroSerie = (valor) => {
     return "El número de serie debe tener al menos 3 caracteres";
   if (limpio.length > 60)
     return "El número de serie no debe exceder 60 caracteres";
-  if (!/^[A-Za-z0-9._\-\/]+$/.test(limpio)) {
+if (!/^[A-Za-z0-9._/-]+$/.test(limpio)) {
+
     return "El número de serie contiene caracteres no válidos";
   }
   return null;
