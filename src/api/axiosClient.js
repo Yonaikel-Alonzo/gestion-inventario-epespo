@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 
 const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000/api",
+  baseURL: process.env.REACT_APP_API_BASE_URL || "https://gestion-inventario-epespo-laravel.onrender.com/api",
   headers: { "Content-Type": "application/json" },
 });
 
